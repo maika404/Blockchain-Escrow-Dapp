@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import deploy from './deploy';
 import Escrow from './Escrow';
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-
 export async function approve(escrowContract, signer) {
   const approveTxn = await escrowContract.connect(signer).approve();
   await approveTxn.wait();
@@ -44,6 +42,7 @@ function App() {
   }
 
   async function connectWallet() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
     setAccount(provider.getSigner().getAddress());
   }
