@@ -15,17 +15,7 @@ function App() {
   const [account, setAccount] = useState();
   const [signer, setSigner] = useState();
 
-  useEffect(() => {
-    async function getAccounts() {
-      const accounts = await provider.send('eth_requestAccounts', []);
-
-      setAccount(accounts[0]);
-      setSigner(provider.getSigner());
-    }
-
-    getAccounts();
-  }, [account]);
-
+  
   async function newContract() {
     const beneficiary = document.getElementById('beneficiary').value;
     const arbiter = document.getElementById('arbiter').value;
@@ -51,6 +41,11 @@ function App() {
     };
 
     setEscrows([...escrows, escrow]);
+  }
+
+  async function connectWallet() {
+    await provider.send('eth_requestAccounts', []);
+    setAccount(provider.getSigner().getAddress());
   }
 
   return (
@@ -82,6 +77,18 @@ function App() {
           }}
         >
           Deploy
+        </div>
+
+        <div
+          className="button"
+          id="connect"
+          onClick={(e) => {
+            e.preventDefault();
+
+            connectWallet();
+          }}
+        >
+          Connect Wallet
         </div>
       </div>
 
